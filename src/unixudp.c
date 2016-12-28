@@ -206,6 +206,8 @@ static int meth_receivefrom(lua_State *L) {
         lua_pushliteral(L, "out of memory");
         return 2;
     }
+    /* make sun_path zero terminated to return an empty string for unbound client */
+    addr.sun_path[0] = 0;
     err = socket_recvfrom(&un->sock, dgram, wanted, &got, (SA *) &addr,
             &addr_len, tm);
     /* Unlike TCP, recv() of zero is not closed, but a zero-length packet. */
